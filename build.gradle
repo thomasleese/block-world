@@ -9,16 +9,17 @@ buildscript {
         jcenter()
         google()
     }
+
     dependencies {
         classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlinVersion"
-
     }
 }
 
 allprojects {
     apply plugin: "eclipse"
 
-    version = '1.0'
+    version = '0.1.0'
+
     ext {
         appName = "BlockWorld"
         gdxVersion = '1.9.13'
@@ -41,10 +42,9 @@ allprojects {
 project(":desktop") {
     apply plugin: "kotlin"
 
-
     dependencies {
         implementation project(":core")
-        api "com.badlogicgames.gdx:gdx-backend-lwjgl:$gdxVersion"
+        api "com.badlogicgames.gdx:gdx-backend-lwjgl3:$gdxVersion"
         api "com.badlogicgames.gdx:gdx-platform:$gdxVersion:natives-desktop"
         api "com.badlogicgames.gdx:gdx-controllers-desktop:$gdxVersion"
         api "com.badlogicgames.gdx:gdx-controllers-platform:$gdxVersion:natives-desktop"
@@ -54,7 +54,6 @@ project(":desktop") {
 
 project(":core") {
     apply plugin: "kotlin"
-
 
     dependencies {
         api "com.badlogicgames.gdx:gdx:$gdxVersion"
