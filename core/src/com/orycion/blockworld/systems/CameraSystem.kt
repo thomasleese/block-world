@@ -11,32 +11,33 @@ class CameraSystem : IteratingSystem(Family.all(CameraComponent::class.java).get
     private val pm = ComponentMapper.getFor(PositionComponent::class.java)
     private val sm = ComponentMapper.getFor(SizeComponent::class.java)
     private val cm = ComponentMapper.getFor(CameraComponent::class.java)
-    private lateinit var players: ImmutableArray<Entity>
 
-    private val playersBoundingBox = BoundingBox()
-    private var tmpPlayersBoundingBoxCenter = Vector3()
+    private lateinit var trackedEntities: ImmutableArray<Entity>
+
+    private val trackedBoundingBox = BoundingBox()
+    private var tmpTrackedBoundingBoxCenter = Vector3()
 
     override fun addedToEngine(engine: Engine) {
         super.addedToEngine(engine)
-        players = engine.getEntitiesFor(Family.all(PlayerComponent::class.java, PositionComponent::class.java, SizeComponent::class.java).get())
+        trackedEntities = engine.getEntitiesFor(Family.all(TrackedComponent::class.java, PositionComponent::class.java, SizeComponent::class.java).get())
     }
 
     override fun processEntity(entity: Entity, deltaTime: Float) {
         val camera = cm[entity].camera
 
-        updatePlayersBoundingBox()
-        playersBoundingBox.getCenter(camera.position)
+        updateTrackedBoundingBox()
+        trackedBoundingBox.getCenter(camera.position)
         camera.update()
     }
 
-    private fun updatePlayersBoundingBox() {
-        playersBoundingBox.clr()
+    private fun updateTrackedBoundingBox() {
+        trackedBoundingBox.clr()
 
-        for (entity in players) {
+        for (entity in trackedEntities) {
             val position = pm[entity].position
             val size = sm[entity].size
-            tmpPlayersBoundingBoxCenter.set(position.x + size.x / 2f, position.y + size.y / 2f, 0f)
-            playersBoundingBox.ext(tmpPlayersBoundingBoxCenter, 10f)
+            tmpTrackedBoundingBoxCenter.set(position.x + size.x / 2f, position.y + size.y / 2f, 0f)
+            trackedBoundingBox.ext(tmpTrackedBoundingBoxCenter, 10f)
         }
     }
 }

@@ -5,9 +5,7 @@ import com.badlogic.ashley.core.PooledEngine
 import com.badlogic.gdx.graphics.OrthographicCamera
 import com.orycion.blockworld.components.*
 import com.orycion.blockworld.maps.LevelMap
-import com.orycion.blockworld.systems.CameraSystem
-import com.orycion.blockworld.systems.GravitySystem
-import com.orycion.blockworld.systems.MovementSystem
+import com.orycion.blockworld.systems.*
 
 class LevelEngine(private val map: LevelMap, private val camera: OrthographicCamera) : PooledEngine() {
     val player: Entity = createEntity()
@@ -23,6 +21,8 @@ class LevelEngine(private val map: LevelMap, private val camera: OrthographicCam
         addSystem(GravitySystem())
         addSystem(MovementSystem())
         addSystem(CameraSystem())
+        addSystem(CollisionSystem())
+        addSystem(ControllerSystem())
     }
 
     private fun addCamera() {
@@ -38,10 +38,11 @@ class LevelEngine(private val map: LevelMap, private val camera: OrthographicCam
         positionComponent.position.set(map.startPosition).sub(0.5f, 0.5f)
         player.add(positionComponent)
         player.add(createComponent(VelocityComponent::class.java))
-        player.add(createComponent(PlayerComponent::class.java))
+        player.add(createComponent(TrackedComponent::class.java))
         val sizeComponent = createComponent(SizeComponent::class.java)
         sizeComponent.size.set(1f, 1f)
         player.add(sizeComponent)
+        player.add(createComponent(ControllableComponent::class.java))
         addEntity(player)
     }
 
@@ -54,6 +55,7 @@ class LevelEngine(private val map: LevelMap, private val camera: OrthographicCam
             val sizeComponent = createComponent(SizeComponent::class.java)
             sizeComponent.size.set(wall.width, wall.height)
             entity.add(sizeComponent)
+            entity.add(createComponent(CollideableComponent::class.java))
             addEntity(entity)
         }
     }
