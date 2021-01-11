@@ -1,28 +1,39 @@
 package com.orycion.blockworld.engines
 
+import com.badlogic.ashley.core.Entity
 import com.badlogic.ashley.core.PooledEngine
 import com.badlogic.gdx.graphics.OrthographicCamera
-import com.badlogic.gdx.maps.tiled.TiledMap
 import com.orycion.blockworld.components.*
 import com.orycion.blockworld.maps.LevelMap
 import com.orycion.blockworld.systems.CameraSystem
 import com.orycion.blockworld.systems.GravitySystem
 import com.orycion.blockworld.systems.MovementSystem
 
-class LevelEngine(map: LevelMap, camera: OrthographicCamera) : PooledEngine() {
-    val player = createEntity()
+class LevelEngine(private val map: LevelMap, private val camera: OrthographicCamera) : PooledEngine() {
+    val player: Entity = createEntity()
 
     init {
+        addSystems()
+        addCamera()
+        addPlayers()
+        addWalls()
+    }
+
+    private fun addSystems() {
         addSystem(GravitySystem())
         addSystem(MovementSystem())
         addSystem(CameraSystem())
+    }
 
+    private fun addCamera() {
         val cameraEntity = createEntity()
         val cameraComponent = createComponent(CameraComponent::class.java)
         cameraComponent.camera = camera
         cameraEntity.add(cameraComponent)
         addEntity(cameraEntity)
+    }
 
+    private fun addPlayers() {
         val positionComponent = createComponent(PositionComponent::class.java)
         positionComponent.position.set(map.startPosition).sub(0.5f, 0.5f)
         player.add(positionComponent)
@@ -32,5 +43,18 @@ class LevelEngine(map: LevelMap, camera: OrthographicCamera) : PooledEngine() {
         sizeComponent.size.set(1f, 1f)
         player.add(sizeComponent)
         addEntity(player)
+    }
+
+    private fun addWalls() {
+        for (wall in map.walls) {
+            val entity = createEntity()
+            val positionComponent = createComponent(PositionComponent::class.java)
+            positionComponent.position.set(wall.x, wall.y)
+            entity.add(positionComponent)
+            val sizeComponent = createComponent(SizeComponent::class.java)
+            sizeComponent.size.set(wall.width, wall.height)
+            entity.add(sizeComponent)
+            addEntity(entity)
+        }
     }
 }

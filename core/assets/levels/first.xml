@@ -7,19 +7,19 @@
   </data>
  </layer>
  <objectgroup id="2" name="Object Layer 1">
-  <object id="1" type="collision" x="0" y="0" width="96" height="1920"/>
-  <object id="2" type="collision" x="96" y="0" width="2784" height="96"/>
-  <object id="3" type="collision" x="2784" y="96" width="96" height="1824"/>
-  <object id="4" type="collision" x="2592" y="288" width="192" height="96"/>
-  <object id="5" type="collision" x="2208" y="384" width="288" height="96"/>
-  <object id="6" type="collision" x="1632" y="576" width="576" height="96"/>
-  <object id="7" type="collision" x="96" y="384" width="576" height="96"/>
-  <object id="8" type="collision" x="576" y="672" width="480" height="96"/>
-  <object id="9" type="collision" x="192" y="1056" width="384" height="96"/>
-  <object id="10" type="collision" x="288" y="1344" width="480" height="96"/>
-  <object id="11" type="collision" x="1056" y="960" width="768" height="96"/>
-  <object id="12" type="collision" x="864" y="1536" width="768" height="96"/>
-  <object id="13" type="collision" x="1824" y="1344" width="576" height="96"/>
+  <object id="1" type="wall" x="0" y="0" width="96" height="1920"/>
+  <object id="2" type="wall" x="96" y="0" width="2784" height="96"/>
+  <object id="3" type="wall" x="2784" y="96" width="96" height="1824"/>
+  <object id="4" type="wall" x="2592" y="288" width="192" height="96"/>
+  <object id="5" type="wall" x="2208" y="384" width="288" height="96"/>
+  <object id="6" type="wall" x="1632" y="576" width="576" height="96"/>
+  <object id="7" type="wall" x="96" y="384" width="576" height="96"/>
+  <object id="8" type="wall" x="576" y="672" width="480" height="96"/>
+  <object id="9" type="wall" x="192" y="1056" width="384" height="96"/>
+  <object id="10" type="wall" x="288" y="1344" width="480" height="96"/>
+  <object id="11" type="wall" x="1056" y="960" width="768" height="96"/>
+  <object id="12" type="wall" x="864" y="1536" width="768" height="96"/>
+  <object id="13" type="wall" x="1824" y="1344" width="576" height="96"/>
   <object id="14" name="Start" type="start" x="192" y="192">
    <point/>
   </object>
