@@ -1,6 +1,5 @@
 package com.orycion.blockworld.screens
 
-import com.badlogic.gdx.Screen
 import com.badlogic.gdx.ScreenAdapter
 import com.badlogic.gdx.assets.AssetManager
 import com.badlogic.gdx.graphics.OrthographicCamera
@@ -20,7 +19,7 @@ class LevelScreen(assetManager: AssetManager, fileName: String) : ScreenAdapter(
     private val spriteBatch = SpriteBatch()
     private val mapRenderer = OrthogonalTiledMapRenderer(map, 1 / 96f, spriteBatch)
     private val shapeRenderer = ShapeRenderer()
-    private val engine = LevelEngine(map)
+    private val engine = LevelEngine(map, camera)
 
     override fun dispose() {
         shapeRenderer.dispose()
