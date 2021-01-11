@@ -9,6 +9,7 @@ import com.orycion.blockworld.components.*
 
 class CameraSystem : IteratingSystem(Family.all(CameraComponent::class.java).get()) {
     private val pm = ComponentMapper.getFor(PositionComponent::class.java)
+    private val sm = ComponentMapper.getFor(SizeComponent::class.java)
     private val cm = ComponentMapper.getFor(CameraComponent::class.java)
     private lateinit var players: ImmutableArray<Entity>
 
@@ -17,7 +18,7 @@ class CameraSystem : IteratingSystem(Family.all(CameraComponent::class.java).get
 
     override fun addedToEngine(engine: Engine) {
         super.addedToEngine(engine)
-        players = engine.getEntitiesFor(Family.all(PlayerComponent::class.java, PositionComponent::class.java).get())
+        players = engine.getEntitiesFor(Family.all(PlayerComponent::class.java, PositionComponent::class.java, SizeComponent::class.java).get())
     }
 
     override fun processEntity(entity: Entity, deltaTime: Float) {
@@ -32,8 +33,9 @@ class CameraSystem : IteratingSystem(Family.all(CameraComponent::class.java).get
         playersBoundingBox.clr()
 
         for (entity in players) {
-            val position = pm[entity]
-            tmpPlayersBoundingBoxCenter.set(position.x, position.y, 0f)
+            val position = pm[entity].position
+            val size = sm[entity].size
+            tmpPlayersBoundingBoxCenter.set(position.x + size.x / 2f, position.y + size.y / 2f, 0f)
             playersBoundingBox.ext(tmpPlayersBoundingBoxCenter, 10f)
         }
     }

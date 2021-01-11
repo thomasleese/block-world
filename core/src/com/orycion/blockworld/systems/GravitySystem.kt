@@ -8,7 +8,7 @@ class GravitySystem : IteratingSystem(Family.all(VelocityComponent::class.java).
     private val vm = ComponentMapper.getFor(VelocityComponent::class.java)
 
     override fun processEntity(entity: Entity, deltaTime: Float) {
-        val velocity = vm[entity]
-        velocity.y -= 0.01f
+        val velocity = vm[entity].velocity
+        velocity.y -= 0.1f
     }
 }

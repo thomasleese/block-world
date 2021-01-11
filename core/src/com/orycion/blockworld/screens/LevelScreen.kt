@@ -10,6 +10,7 @@ import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer
 import com.badlogic.gdx.utils.viewport.ExtendViewport
 import com.orycion.blockworld.components.PositionComponent
 import com.orycion.blockworld.engines.LevelEngine
+import com.orycion.blockworld.maps.LevelMap
 
 class LevelScreen(assetManager: AssetManager, fileName: String) : ScreenAdapter() {
     private val map = assetManager.get<TiledMap>("levels/$fileName.xml")
@@ -17,9 +18,9 @@ class LevelScreen(assetManager: AssetManager, fileName: String) : ScreenAdapter(
     private val camera = OrthographicCamera()
     private val viewport = ExtendViewport(20f, 20f, camera)
     private val spriteBatch = SpriteBatch()
-    private val mapRenderer = OrthogonalTiledMapRenderer(map, 1 / 96f, spriteBatch)
+    private val mapRenderer = OrthogonalTiledMapRenderer(map, LevelMap.UNIT_SCALE, spriteBatch)
     private val shapeRenderer = ShapeRenderer()
-    private val engine = LevelEngine(map, camera)
+    private val engine = LevelEngine(LevelMap(map), camera)
 
     override fun dispose() {
         shapeRenderer.dispose()
@@ -37,7 +38,7 @@ class LevelScreen(assetManager: AssetManager, fileName: String) : ScreenAdapter(
         mapRenderer.render()
 
         shapeRenderer.projectionMatrix = camera.combined
-        val position = engine.player.getComponent(PositionComponent::class.java)
+        val position = engine.player.getComponent(PositionComponent::class.java).position
         shapeRenderer.begin(ShapeRenderer.ShapeType.Filled)
         shapeRenderer.rect(position.x, position.y, 1f, 1f)
         shapeRenderer.end()
