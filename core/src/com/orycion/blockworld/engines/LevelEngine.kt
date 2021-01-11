@@ -8,7 +8,12 @@ import com.orycion.blockworld.maps.LevelMap
 import com.orycion.blockworld.systems.*
 
 class LevelEngine(private val map: LevelMap, private val camera: OrthographicCamera) : PooledEngine() {
+    companion object {
+        const val FIXED_DELTA_TIME = 1 / 60f
+    }
+
     val player: Entity = createEntity()
+    private var accumulator = 0.0
 
     init {
         addSystems()
@@ -17,12 +22,20 @@ class LevelEngine(private val map: LevelMap, private val camera: OrthographicCam
         addWalls()
     }
 
+    override fun update(deltaTime: Float) {
+        accumulator += deltaTime
+
+        while (accumulator >= FIXED_DELTA_TIME) {
+            super.update(FIXED_DELTA_TIME)
+            accumulator -= deltaTime
+        }
+    }
+
     private fun addSystems() {
-        addSystem(GravitySystem())
-        addSystem(MovementSystem())
-        addSystem(CameraSystem())
-        addSystem(CollisionSystem())
         addSystem(ControllerSystem())
+        addSystem(PhysicsSystem())
+        addSystem(CollisionSystem())
+        addSystem(CameraSystem())
     }
 
     private fun addCamera() {

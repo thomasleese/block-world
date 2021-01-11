@@ -18,17 +18,15 @@ class ControllerSystem : IteratingSystem(Family.all(ControllableComponent::class
         val velocity = vm[entity].velocity
 
         if (Gdx.input.isKeyJustPressed(controllable.jump)) {
-            velocity.y = 2f
+            velocity.y = 20f
         }
 
-        if (Gdx.input.isKeyJustPressed(controllable.left)) {
-            velocity.x = -2f
+        if (Gdx.input.isKeyPressed(controllable.left)) {
+            velocity.x = Interpolation.linear.apply(velocity.x, -6f, deltaTime * 60f)
         }
 
-        if (Gdx.input.isKeyJustPressed(controllable.right)) {
-            velocity.x = 2f
+        if (Gdx.input.isKeyPressed(controllable.right)) {
+            velocity.x = Interpolation.linear.apply(velocity.x, 6f, deltaTime * 60f)
         }
-
-        velocity.x = Interpolation.linear.apply(velocity.x, 0f, deltaTime)
     }
 }
