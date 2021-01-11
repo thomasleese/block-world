@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<map version="1.4" tiledversion="1.4.3" orientation="orthogonal" renderorder="right-down" width="30" height="20" tilewidth="96" tileheight="96" infinite="0" nextlayerid="3" nextobjectid="14">
+ <tileset firstgid="1" source="../tilesets/blocks.xml"/>
+ <layer id="1" name="Tile Layer 1" width="30" height="20">
+  <data encoding="base64" compression="zlib">
+   eJzlkFsKwCAMwOoczsfuf979KIhYqs4qxUC+A1EAoDa5mlO6dzR1PeJfrswc6Z814kg3VJyF9M/cXUc40n0LOZHymatrK/ZgEKnuKlq7DyFXdzYndj/SLAHU
+  </data>
+ </layer>
+ <objectgroup id="2" name="Object Layer 1">
+  <object id="1" type="collision" x="0" y="0" width="96" height="1920"/>
+  <object id="2" type="collision" x="96" y="0" width="2784" height="96"/>
+  <object id="3" type="collision" x="2784" y="96" width="96" height="1824"/>
+  <object id="4" type="collision" x="2592" y="288" width="192" height="96"/>
+  <object id="5" type="collision" x="2208" y="384" width="288" height="96"/>
+  <object id="6" type="collision" x="1632" y="576" width="576" height="96"/>
+  <object id="7" type="collision" x="96" y="384" width="576" height="96"/>
+  <object id="8" type="collision" x="576" y="672" width="480" height="96"/>
+  <object id="9" type="collision" x="192" y="1056" width="384" height="96"/>
+  <object id="10" type="collision" x="288" y="1344" width="480" height="96"/>
+  <object id="11" type="collision" x="1056" y="960" width="768" height="96"/>
+  <object id="12" type="collision" x="864" y="1536" width="768" height="96"/>
+  <object id="13" type="collision" x="1824" y="1344" width="576" height="96"/>
+ </objectgroup>
+</map>
