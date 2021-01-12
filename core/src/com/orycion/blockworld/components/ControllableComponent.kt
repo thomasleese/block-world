@@ -5,7 +5,7 @@ import com.badlogic.gdx.Input
 import com.badlogic.gdx.utils.Pool
 
 class ControllableComponent : Component {
-    val jump = Input.Keys.UP
-    val left = Input.Keys.LEFT
-    val right = Input.Keys.RIGHT
+    var jump = Input.Keys.UP
+    var left = Input.Keys.LEFT
+    var right = Input.Keys.RIGHT
 }

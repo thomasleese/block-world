@@ -26,28 +26,41 @@ class CameraSystem(private val levelSize: Vector2) : IteratingSystem(Family.all(
 
     override fun processEntity(entity: Entity, deltaTime: Float) {
         val camera = cm[entity].camera
+        val viewport = cm[entity].viewport
 
         updateTrackedBoundingBox()
+
         trackedBoundingBox.getCenter(camera.position)
+
+        viewport.minWorldWidth = trackedBoundingBox.width
+        viewport.minWorldHeight = trackedBoundingBox.height
+        viewport.update(Gdx.graphics.width, Gdx.graphics.height)
     }
 
     private fun updateTrackedBoundingBox() {
         trackedBoundingBox.inf()
 
+        extendBoundingBox()
+        constrainBoundingBox()
+
+        trackedBoundingBox.set(trackedBoundingBox.min, trackedBoundingBox.max)
+    }
+
+    private fun extendBoundingBox() {
         for (entity in trackedEntities) {
             val position = pm[entity].position
             val size = sm[entity].size
             tmpTrackedBoundingBoxCenter.set(position.x + size.x / 2f, position.y + size.y / 2f, 0f)
             trackedBoundingBox.ext(tmpTrackedBoundingBoxCenter, 10f)
         }
+    }
 
+    private fun constrainBoundingBox() {
         if (trackedBoundingBox.min.x < 0) {
-            trackedBoundingBox.max.x += -trackedBoundingBox.min.x
             trackedBoundingBox.min.x = 0f
         }
 
         if (trackedBoundingBox.min.y < 0) {
-            trackedBoundingBox.max.y += -trackedBoundingBox.min.y
             trackedBoundingBox.min.y = 0f
         }
 
@@ -58,7 +71,5 @@ class CameraSystem(private val levelSize: Vector2) : IteratingSystem(Family.all(
         if (trackedBoundingBox.max.y > levelSize.y) {
             trackedBoundingBox.max.y = levelSize.y
         }
-
-        trackedBoundingBox.set(trackedBoundingBox.min, trackedBoundingBox.max)
     }
 }
