@@ -13,8 +13,12 @@ class LevelMap(tiledMap: TiledMap) {
 
     var startPosition = Vector2()
     val walls = mutableListOf<Wall>()
+    val size = Vector2()
 
     init {
+        size.x = tiledMap.properties["width"].toString().toFloat()
+        size.y = tiledMap.properties["height"].toString().toFloat()
+
         for (layer in tiledMap.layers) {
             layer.objects.forEach { parseObject(it) }
         }
