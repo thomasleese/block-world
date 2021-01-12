@@ -8,21 +8,18 @@ import com.badlogic.ashley.systems.IteratingSystem
 import com.badlogic.ashley.utils.ImmutableArray
 import com.badlogic.gdx.math.Intersector
 import com.badlogic.gdx.math.Rectangle
-import com.badlogic.gdx.math.Vector3
-import com.badlogic.gdx.math.collision.BoundingBox
 import com.orycion.blockworld.components.*
-import org.w3c.dom.css.Rect
 
 class CollisionSystem : IteratingSystem(Family.all(PositionComponent::class.java, SizeComponent::class.java, VelocityComponent::class.java).exclude(CollideableComponent::class.java).get()) {
     private val pm = ComponentMapper.getFor(PositionComponent::class.java)
     private val sm = ComponentMapper.getFor(SizeComponent::class.java)
     private val vm = ComponentMapper.getFor(VelocityComponent::class.java)
-    private val cm = ComponentMapper.getFor(CollideableComponent::class.java)
+    private val cm = ComponentMapper.getFor(ControllableComponent::class.java)
 
     private lateinit var collideableEntities: ImmutableArray<Entity>
 
     private val tmpRectanglePlayer = Rectangle()
-    private val tmpRectangleCollidable = Rectangle()
+    private val tmpRectangleCollideable = Rectangle()
     private val tmpRectangleIntersection = Rectangle()
 
     override fun addedToEngine(engine: Engine) {
@@ -40,14 +37,14 @@ class CollisionSystem : IteratingSystem(Family.all(PositionComponent::class.java
         for (collideableEntity in collideableEntities) {
             val collideablePosition = pm[collideableEntity].position
             val collideableSize = sm[collideableEntity].size
-            tmpRectangleCollidable.set(collideablePosition.x, collideablePosition.y, collideableSize.x, collideableSize.y)
+            tmpRectangleCollideable.set(collideablePosition.x, collideablePosition.y, collideableSize.x, collideableSize.y)
 
-            if (!Intersector.intersectRectangles(tmpRectanglePlayer, tmpRectangleCollidable, tmpRectangleIntersection)) {
+            if (!Intersector.intersectRectangles(tmpRectanglePlayer, tmpRectangleCollideable, tmpRectangleIntersection)) {
                 continue
             }
 
             if (tmpRectangleIntersection.height < tmpRectangleIntersection.width) {
-                if (position.y >= tmpRectangleIntersection.y - tmpRectangleIntersection.height) {
+                if (position.y > tmpRectangleIntersection.y - tmpRectangleIntersection.height) {
                     position.y = collideablePosition.y + collideableSize.y
                     velocity.y = 0f
                 } else {

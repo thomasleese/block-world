@@ -33,7 +33,8 @@ class LevelEngine(private val map: LevelMap, private val camera: OrthographicCam
 
     private fun addSystems() {
         addSystem(ControllerSystem())
-        addSystem(PhysicsSystem())
+        addSystem(MovementSystem())
+        addSystem(GravitySystem())
         addSystem(CollisionSystem())
         addSystem(CameraSystem())
     }
