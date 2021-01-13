@@ -3,11 +3,14 @@ package com.orycion.blockworld.systems
 import com.badlogic.ashley.core.*
 import com.badlogic.ashley.systems.*
 import com.badlogic.ashley.utils.ImmutableArray
+import com.badlogic.gdx.Gdx
+import com.badlogic.gdx.graphics.Camera
 import com.badlogic.gdx.graphics.OrthographicCamera
 import com.badlogic.gdx.math.MathUtils
 import com.badlogic.gdx.math.Vector2
 import com.badlogic.gdx.math.Vector3
 import com.badlogic.gdx.math.collision.BoundingBox
+import com.badlogic.gdx.utils.viewport.ScreenViewport
 import com.orycion.blockworld.components.*
 import kotlin.math.max
 import kotlin.math.min
@@ -21,6 +24,8 @@ class CameraSystem(private val levelSize: Vector2) : IteratingSystem(Family.all(
 
     val boundingBox = BoundingBox()
     private var tmpBoundingBoxPoint = Vector3()
+    private var tmpTopRight = Vector3()
+    private var tmpBottomLeft = Vector3()
 
     override fun addedToEngine(engine: Engine) {
         super.addedToEngine(engine)
@@ -44,7 +49,7 @@ class CameraSystem(private val levelSize: Vector2) : IteratingSystem(Family.all(
             val position = pm[entity].position
             val size = sm[entity].size
             tmpBoundingBoxPoint.set(position.x + size.x / 2f, position.y + size.y / 2f, 0f)
-            boundingBox.ext(tmpBoundingBoxPoint, 10f)
+            boundingBox.ext(tmpBoundingBoxPoint, 12f)
         }
     }
 
@@ -56,8 +61,46 @@ class CameraSystem(private val levelSize: Vector2) : IteratingSystem(Family.all(
     }
 
     private fun updateCamera(camera: OrthographicCamera) {
+        zoomAndPositionCameraToBoundingBox(camera)
+        fitCameraToLevel(camera)
+    }
+
+    private fun zoomAndPositionCameraToBoundingBox(camera: OrthographicCamera) {
+        val yZoom = boundingBox.height / camera.viewportHeight
+        val xZoom = boundingBox.width / camera.viewportWidth
+        camera.zoom = max(xZoom, yZoom)
+
         boundingBox.getCenter(camera.position)
-        camera.zoom = boundingBox.height / camera.viewportHeight
+
+        camera.update()
+    }
+
+    private fun fitCameraToLevel(camera: OrthographicCamera) {
+        val bottomLeft = camera.unproject(tmpBottomLeft.set(0f, Gdx.graphics.height.toFloat(), 0f))
+        val topRight = camera.unproject(tmpTopRight.set(Gdx.graphics.width.toFloat(), 0f, 0f))
+
+        if (levelSize.x >= camera.viewportWidth * camera.zoom) {
+            if (bottomLeft.x < 0) {
+                camera.position.x -= bottomLeft.x
+            }
+            if (topRight.x > levelSize.x) {
+                camera.position.x += levelSize.x - topRight.x
+            }
+        } else {
+            camera.position.x = levelSize.x / 2f
+        }
+
+        if (levelSize.y >= camera.viewportHeight * camera.zoom) {
+            if (bottomLeft.y < 0) {
+                camera.position.y -= bottomLeft.y
+            }
+            if (topRight.y > levelSize.y) {
+                camera.position.y += levelSize.y - topRight.y
+            }
+        } else {
+            camera.position.y = levelSize.y / 2f
+        }
+
         camera.update()
     }
 }

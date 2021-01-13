@@ -5,6 +5,7 @@ import com.badlogic.ashley.core.PooledEngine
 import com.badlogic.gdx.Input
 import com.badlogic.gdx.graphics.OrthographicCamera
 import com.badlogic.gdx.utils.viewport.ExtendViewport
+import com.badlogic.gdx.utils.viewport.ScreenViewport
 import com.orycion.blockworld.components.*
 import com.orycion.blockworld.maps.LevelMap
 import com.orycion.blockworld.systems.*
@@ -61,21 +62,21 @@ class LevelEngine(private val map: LevelMap, private val camera: OrthographicCam
         player.add(createComponent(ControllableComponent::class.java))
         addEntity(player)
 
-        val player2: Entity = createEntity()
-        val positionComponent2 = createComponent(PositionComponent::class.java)
-        positionComponent2.position.set(map.startPosition).sub(0.5f, 0.5f)
-        player2.add(positionComponent2)
-        player2.add(createComponent(VelocityComponent::class.java))
-        player2.add(createComponent(TrackedComponent::class.java))
-        val sizeComponent2 = createComponent(SizeComponent::class.java)
-        sizeComponent2.size.set(90 / 96f, 1.5f)
-        player2.add(sizeComponent2)
-        val controllableComponent = createComponent(ControllableComponent::class.java)
-        controllableComponent.jump = Input.Keys.W
-        controllableComponent.left = Input.Keys.A
-        controllableComponent.right = Input.Keys.D
-        player2.add(controllableComponent)
-        addEntity(player2)
+//        val player2: Entity = createEntity()
+//        val positionComponent2 = createComponent(PositionComponent::class.java)
+//        positionComponent2.position.set(map.startPosition).sub(0.5f, 0.5f)
+//        player2.add(positionComponent2)
+//        player2.add(createComponent(VelocityComponent::class.java))
+//        player2.add(createComponent(TrackedComponent::class.java))
+//        val sizeComponent2 = createComponent(SizeComponent::class.java)
+//        sizeComponent2.size.set(90 / 96f, 1.5f)
+//        player2.add(sizeComponent2)
+//        val controllableComponent = createComponent(ControllableComponent::class.java)
+//        controllableComponent.jump = Input.Keys.W
+//        controllableComponent.left = Input.Keys.A
+//        controllableComponent.right = Input.Keys.D
+//        player2.add(controllableComponent)
+//        addEntity(player2)
     }
 
     private fun addWalls() {
