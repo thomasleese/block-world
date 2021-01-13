@@ -9,7 +9,7 @@ import com.badlogic.gdx.graphics.glutils.ShapeRenderer
 import com.badlogic.gdx.maps.tiled.TiledMap
 import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer
 import com.badlogic.gdx.math.Vector3
-import com.badlogic.gdx.utils.viewport.ExtendViewport
+import com.badlogic.gdx.utils.viewport.ScreenViewport
 import com.orycion.blockworld.components.ControllableComponent
 import com.orycion.blockworld.components.PositionComponent
 import com.orycion.blockworld.components.SizeComponent
@@ -21,11 +21,15 @@ class LevelScreen(assetManager: AssetManager, fileName: String) : ScreenAdapter(
     private val map = assetManager.get<TiledMap>("levels/$fileName.xml")
 
     private val camera = OrthographicCamera()
-    private val viewport = ExtendViewport(20f, 20f, camera)
+    private val viewport = ScreenViewport(camera)
     private val spriteBatch = SpriteBatch()
     private val mapRenderer = OrthogonalTiledMapRenderer(map, LevelMap.UNIT_SCALE, spriteBatch)
     private val shapeRenderer = ShapeRenderer()
-    private val engine = LevelEngine(LevelMap(map), camera, viewport)
+    private val engine = LevelEngine(LevelMap(map), camera)
+
+    init {
+        viewport.unitsPerPixel = LevelMap.UNIT_SCALE
+    }
 
     override fun dispose() {
         shapeRenderer.dispose()
@@ -36,8 +40,6 @@ class LevelScreen(assetManager: AssetManager, fileName: String) : ScreenAdapter(
 
     override fun render(deltaTime: Float) {
         engine.update(deltaTime)
-
-        viewport.apply()
 
         mapRenderer.setView(camera)
         mapRenderer.render()
@@ -55,9 +57,9 @@ class LevelScreen(assetManager: AssetManager, fileName: String) : ScreenAdapter(
         val cameraSystem = engine.getSystem(CameraSystem::class.java)
         shapeRenderer.begin(ShapeRenderer.ShapeType.Line)
         val minCorner = Vector3()
-        cameraSystem.trackedBoundingBox.getMin(minCorner)
+        cameraSystem.boundingBox.getMin(minCorner)
         val maxCorner = Vector3()
-        cameraSystem.trackedBoundingBox.getMax(maxCorner)
+        cameraSystem.boundingBox.getMax(maxCorner)
         shapeRenderer.rect(minCorner.x, minCorner.y, maxCorner.x - minCorner.x, maxCorner.y - minCorner.y)
         shapeRenderer.end()
     }

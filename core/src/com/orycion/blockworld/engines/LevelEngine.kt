@@ -9,7 +9,7 @@ import com.orycion.blockworld.components.*
 import com.orycion.blockworld.maps.LevelMap
 import com.orycion.blockworld.systems.*
 
-class LevelEngine(private val map: LevelMap, private val camera: OrthographicCamera, private val viewport: ExtendViewport) : PooledEngine() {
+class LevelEngine(private val map: LevelMap, private val camera: OrthographicCamera) : PooledEngine() {
     companion object {
         const val FIXED_DELTA_TIME = 1 / 60f
     }
@@ -44,7 +44,6 @@ class LevelEngine(private val map: LevelMap, private val camera: OrthographicCam
         val cameraEntity = createEntity()
         val cameraComponent = createComponent(CameraComponent::class.java)
         cameraComponent.camera = camera
-        cameraComponent.viewport = viewport
         cameraEntity.add(cameraComponent)
         addEntity(cameraEntity)
     }

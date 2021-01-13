@@ -6,5 +6,4 @@ import com.badlogic.gdx.utils.viewport.ExtendViewport
 
 class CameraComponent : Component {
     lateinit var camera: OrthographicCamera
-    lateinit var viewport: ExtendViewport
 }

@@ -6,7 +6,8 @@ import com.badlogic.gdx.math.Vector2
 
 class LevelMap(tiledMap: TiledMap) {
     companion object {
-        const val UNIT_SCALE = 1 / 96f
+        const val UNITS_PER_PIXEL = 96f
+        const val UNIT_SCALE = 1 / UNITS_PER_PIXEL
     }
 
     data class Wall(val x: Float, val y: Float, val width: Float, val height: Float)
