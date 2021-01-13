@@ -4,14 +4,11 @@ import com.badlogic.ashley.core.*
 import com.badlogic.ashley.systems.*
 import com.badlogic.ashley.utils.ImmutableArray
 import com.badlogic.gdx.Gdx
-import com.badlogic.gdx.graphics.Camera
 import com.badlogic.gdx.graphics.OrthographicCamera
 import com.badlogic.gdx.math.Interpolation
-import com.badlogic.gdx.math.MathUtils
 import com.badlogic.gdx.math.Vector2
 import com.badlogic.gdx.math.Vector3
 import com.badlogic.gdx.math.collision.BoundingBox
-import com.badlogic.gdx.utils.viewport.ScreenViewport
 import com.orycion.blockworld.components.*
 import kotlin.math.max
 import kotlin.math.min
@@ -25,6 +22,7 @@ class CameraSystem(private val levelSize: Vector2) : IteratingSystem(Family.all(
 
     val boundingBox = BoundingBox()
     private var tmpBoundingBoxPoint = Vector3()
+    private var tmpBoundingBoxCenter = Vector3()
     private var tmpTopRight = Vector3()
     private var tmpBottomLeft = Vector3()
 
@@ -63,7 +61,7 @@ class CameraSystem(private val levelSize: Vector2) : IteratingSystem(Family.all(
 
     private fun updateCamera(camera: OrthographicCamera, deltaTime: Float) {
         zoomCameraToBoundingBox(camera, deltaTime)
-        positionCameraToBoundingBox(camera)
+        positionCameraToBoundingBox(camera, deltaTime)
         fitCameraToLevel(camera)
     }
 
@@ -73,8 +71,9 @@ class CameraSystem(private val levelSize: Vector2) : IteratingSystem(Family.all(
         camera.zoom = Interpolation.linear.apply(camera.zoom, max(xZoom, yZoom), deltaTime)
     }
 
-    private fun positionCameraToBoundingBox(camera: OrthographicCamera) {
-        boundingBox.getCenter(camera.position)
+    private fun positionCameraToBoundingBox(camera: OrthographicCamera, deltaTime: Float) {
+        boundingBox.getCenter(tmpBoundingBoxCenter)
+        camera.position.interpolate(tmpBoundingBoxCenter, deltaTime, Interpolation.linear)
         camera.update()
     }
 
