@@ -6,6 +6,7 @@ import com.badlogic.ashley.utils.ImmutableArray
 import com.badlogic.gdx.Gdx
 import com.badlogic.gdx.graphics.Camera
 import com.badlogic.gdx.graphics.OrthographicCamera
+import com.badlogic.gdx.math.Interpolation
 import com.badlogic.gdx.math.MathUtils
 import com.badlogic.gdx.math.Vector2
 import com.badlogic.gdx.math.Vector3
@@ -34,7 +35,7 @@ class CameraSystem(private val levelSize: Vector2) : IteratingSystem(Family.all(
 
     override fun processEntity(entity: Entity, deltaTime: Float) {
         updateBoundingBox()
-        updateCamera(cm[entity].camera)
+        updateCamera(cm[entity].camera, deltaTime)
     }
 
     private fun updateBoundingBox() {
@@ -60,18 +61,20 @@ class CameraSystem(private val levelSize: Vector2) : IteratingSystem(Family.all(
         boundingBox.max.y = min(boundingBox.max.y, levelSize.y)
     }
 
-    private fun updateCamera(camera: OrthographicCamera) {
-        zoomAndPositionCameraToBoundingBox(camera)
+    private fun updateCamera(camera: OrthographicCamera, deltaTime: Float) {
+        zoomCameraToBoundingBox(camera, deltaTime)
+        positionCameraToBoundingBox(camera)
         fitCameraToLevel(camera)
     }
 
-    private fun zoomAndPositionCameraToBoundingBox(camera: OrthographicCamera) {
+    private fun zoomCameraToBoundingBox(camera: OrthographicCamera, deltaTime: Float) {
         val yZoom = boundingBox.height / camera.viewportHeight
         val xZoom = boundingBox.width / camera.viewportWidth
-        camera.zoom = max(xZoom, yZoom)
+        camera.zoom = Interpolation.linear.apply(camera.zoom, max(xZoom, yZoom), deltaTime)
+    }
 
+    private fun positionCameraToBoundingBox(camera: OrthographicCamera) {
         boundingBox.getCenter(camera.position)
-
         camera.update()
     }
 
